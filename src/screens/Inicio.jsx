@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly"
   },
   button: {
-    backgroundColor: "#FAFAFA"
+    backgroundColor: "#EFEFEF"
   },
   buttonLabel: {
     color: "#222222"

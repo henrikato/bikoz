@@ -62,7 +62,7 @@ export default () => {
               LOGIN
             </Button>
 
-            <Button style={{backgroundColor: "#FAFAFA"}} 
+            <Button style={{backgroundColor: "#EFEFEF"}} 
               labelStyle={{color: "#222"}}
               onPress={() => _form.current.submitForm()}>
                 ESQUECI MINHA SENHA
