@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import SegmentedControl from '@react-native-community/segmented-control';
-import Constants from 'expo-constants';
-import Container from '@components/Container';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import Constants from 'expo-constants';
+import Container from 'components/Container';
 
 export default () => {
   const navigation = useNavigation();
