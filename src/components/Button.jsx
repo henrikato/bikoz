@@ -41,11 +41,11 @@ const styles = StyleSheet.create({
     shadowOffset: {
       height: 2
     },
-    backgroundColor: "#FAFAFA",
+    backgroundColor: Constants.manifest.primaryColor,
   },
   btnText: {
     textAlign: "center",
-    color: "#222222",
+    color: "#FAFAFA",
     letterSpacing: .5,
     fontWeight: "600"
   }
