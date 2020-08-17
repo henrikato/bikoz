@@ -1,10 +1,12 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import SelecaoTipoConta from '@screens/cadastro/SelecaoTipoConta';
-import CadastroDadosUsuario from '@screens/cadastro/CadastroDadosUsuario';
-import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import SelecaoTipoConta from 'screens/cadastro/SelecaoTipoConta';
+import CadastroDadosUsuario from 'screens/cadastro/CadastroDadosUsuario';
+import CadastroDadosEnderecoUsuario from 'screens/cadastro/CadastroDadosEnderecoUsuario';
+import CadastroDadosPerfilUsuario from 'screens/cadastro/CadastroDadosPerfilUsuario';
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -26,6 +28,8 @@ export default () => {
     }}>
       <Screen name="selecaoTipoConta" component={SelecaoTipoConta} />
       <Screen name="cadastroDadosUsuario" component={CadastroDadosUsuario} />
+      <Screen name="cadastroDadosEnderecoUsuario" component={CadastroDadosEnderecoUsuario} />
+      <Screen name="cadastroDadosPerfilUsuario" component={CadastroDadosPerfilUsuario} />
     </Navigator>
   )
 }
