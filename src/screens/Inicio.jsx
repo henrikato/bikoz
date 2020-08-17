@@ -3,11 +3,11 @@ import { View, StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { useNavigation } from '@react-navigation/native';
-import Button from '@components/Button';
-import Container from '@components/Container';
-import FlexImage from '@components/FlexImage';
+import Button from 'components/Button';
+import Container from 'components/Container';
+import FlexImage from 'components/FlexImage';
 
-import logo from '@assets/logo-branco.png'
+import logo from 'assets/logo-branco.png'
 
 export default () => {
   const navigation = useNavigation();
@@ -24,10 +24,10 @@ export default () => {
           onPress={() => navigation.navigate("login")}>
           EFETUAR LOGIN
         </Button>
-        <Button onPress={() => navigation.navigate("cadastro")}>CRIAR MINHA CONTA</Button>
+        <Button style={styles.button} labelStyle={styles.buttonLabel} onPress={() => navigation.navigate("cadastro")}>CRIAR MINHA CONTA</Button>
       </View>
 
-      <Button labelStyle={{color: "#1877F2", marginLeft: 10}} 
+      <Button style={styles.button} labelStyle={{color: "#1877F2", marginLeft: 10}} 
         icon={<FontAwesomeIcon icon={['fab', 'facebook']} color="#1877F2" />}>
         LOGIN COM FACEBOOK
       </Button>
@@ -39,5 +39,11 @@ const styles = StyleSheet.create({
   view: {
     backgroundColor: Constants.manifest.primaryColor,
     justifyContent: "space-evenly"
+  },
+  button: {
+    backgroundColor: "#FAFAFA"
+  },
+  buttonLabel: {
+    color: "#222222"
   }
 });
