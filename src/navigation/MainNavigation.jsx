@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, TouchableOpacity } from 'react-native';
+import { Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
@@ -27,7 +27,7 @@ const Tabs = () => (
       activeBackgroundColor: Constants.manifest.primaryColor,
       inactiveBackgroundColor: Constants.manifest.primaryColor,
       activeTintColor: "#FAFAFA",
-      inactiveTintColor: "#AAAAAA"
+      inactiveTintColor: "rgba(250, 250, 250, .6)"
     }}>
     <TabScreen name="mensagens" component={Mensagens} options={{
       title: "Mensagens",
@@ -51,10 +51,14 @@ const Tabs = () => (
 export default () => (
   <Navigator screenOptions={{
     headerStyle: { backgroundColor: Constants.manifest.primaryColor, shadowOpacity: 0, elevation: 0 },
-    headerTitle: () => <Image source={logo} style={{width: 100, margin: 8, flex: 1, alignSelf: "center"}} resizeMode="contain" />,
+    headerTitleAlign: "center",
+    headerTitleStyle: {
+      fontSize: 16
+    },
+    headerTitle: () => <Image source={logo} style={styles.headerLogo} resizeMode="contain" />,
     headerBackTitleVisible: false,
     headerLeft: ({onPress}) => (
-      <TouchableOpacity onPress={onPress} style={{marginLeft: 10}}>
+      <TouchableOpacity onPress={onPress} style={{marginLeft: 15}}>
         <FontAwesomeIcon icon="arrow-left" size={20} color="#FAFAFA" />
       </TouchableOpacity>
     )
@@ -67,3 +71,11 @@ export default () => (
     <Screen name="vaga" component={Vaga} />
   </Navigator>
 )
+
+const styles = StyleSheet.create({
+  headerLogo: {
+    width: 100,
+    marginVertical: 8,
+    flexGrow: 1,
+  }
+})
