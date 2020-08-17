@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { TextInput, StyleSheet, View, Text } from 'react-native';
 import { useField } from '@unform/core';
 
-function FormInput ({label, helper, children, name, ...props}) {
+function FormInput ({label, helper, children, style, name, ...props}) {
   const _ref = useRef('');
 
   const { fieldName, registerField, defaultValue, error, clearError } = useField(name);
@@ -41,7 +41,7 @@ function FormInput ({label, helper, children, name, ...props}) {
         defaultValue={defaultValue} 
         onChangeText={_changeText} 
         onFocus={clearError} 
-        style={styles.fieldInput} 
+        style={[styles.fieldInput, style]} 
         {...props} />
       {children}
     </View>
@@ -62,7 +62,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#888888",
     borderRadius: 5,
-    height: 45,
     alignItems: "center",
     paddingRight: 10
   },
