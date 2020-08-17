@@ -1,0 +1,1 @@
+export const FormatarEnderecoSimples = ({endereco, numero}) => `${endereco}, ${numero}`;
