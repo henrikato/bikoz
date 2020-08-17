@@ -1,11 +1,11 @@
 import React, { useRef, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import Container from '@components/Container';
 import { Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
-import { Form } from '@unform/mobile';
-import FormInput from '@components/FormInput';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { Form } from '@unform/mobile';
 import * as yup from 'yup';
+import Container from 'components/Container';
+import FormInput from 'components/FormInput';
 
 export default () => {
   const navigation = useNavigation();
@@ -22,7 +22,7 @@ export default () => {
     </TouchableOpacity>
   );
 
-  function _handleSubmit(data) {
+  function _validaForm(data, callback) {
     const schema = yup.object().shape({
       tipoConta: yup.number().default(tipoConta),
       nome: yup.string().required("Informe o seu nome"),
@@ -44,9 +44,7 @@ export default () => {
     });
 
     schema.validate(data, { abortEarly: false })
-      .then(data => {
-        Alert.alert("Dados do Usuario", data);
-      })
+      .then(callback)
       .catch(err => {
         const validationErrors = {};
         if(err instanceof yup.ValidationError) {
@@ -54,6 +52,12 @@ export default () => {
           _form.current.setErrors(validationErrors);
         }
       });
+  }
+
+  function _handleSubmit(data) {
+    // _validaForm(data, data => {
+      navigation.navigate("cadastroDadosEnderecoUsuario", {data})
+    // });
   }
 
   return <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 40}>
