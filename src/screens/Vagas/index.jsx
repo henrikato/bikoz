@@ -25,15 +25,16 @@ export default () => {
         endereco: "Av. Rio Branco",
         numero: "1231"
       },
+      imagem: "https://scontent.fymy1-2.fna.fbcdn.net/v/t1.0-9/p720x720/103901952_1510217042494005_4737862598436095576_o.jpg?_nc_cat=105&_nc_sid=8024bb&_nc_ohc=JMyk5HQYu0IAX-sw2Jy&_nc_ht=scontent.fymy1-2.fna&_nc_tp=6&oh=b05d4c7bca0e7644fbc9aa0cc564ae2c&oe=5F3D11DB",
       dataHoraInicio: moment("2020-08-21T19:00:00"),
       dataHoraFim: moment("2020-08-22T00:00:00")
     }
   ]
 
-  const renderizaVaga = ({id, titulo, ofertante, endereco, ...props}) => (
+  const renderizaVaga = ({id, titulo, imagem, ofertante, endereco, ...props}) => (
     <TouchableHighlight style={styles.vaga} underlayColor="#E7E7E7" onPress={() => navigation.navigate("vaga")}>
       <View style={styles.conteudoVaga}>
-        <FlexImage source={{url: "http://placehold.it/120x120"}} style={styles.imgVaga} />
+        <FlexImage source={{uri: imagem}} style={styles.imgVaga} />
         <View>
           <Text style={styles.tituloVaga}>{titulo} - {ofertante.nome}</Text>
           <Text style={styles.subTituloVaga}>{FormatarEnderecoSimples(endereco)}</Text>
@@ -95,7 +96,7 @@ const styles = StyleSheet.create({
     height: 60,
     width: 60,
     overflow: "hidden",
-    borderRadius: 5
+    borderRadius: 5,
   },
   tituloVaga: {
     fontWeight: "600",

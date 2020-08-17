@@ -8,12 +8,12 @@ import Button from 'components/Button';
 export default () => {
   const navigation = useNavigation();
   navigation.setOptions({
-    title: "Bico de Garçom - DOCTOR BEER"
+    headerTitle: ({style}) => <Text style={[style, {color: "#FAFAFA"}]}>Bico de Garçom - DOCTOR BEER</Text>
   });
 
   return (
     <>
-      <Image source={{url: "http://placehold.it/512x512"}} style={styles.banner} resizeMode="cover" />
+      <Image source={{uri: "https://scontent.fymy1-2.fna.fbcdn.net/v/t1.0-9/p720x720/103901952_1510217042494005_4737862598436095576_o.jpg?_nc_cat=105&_nc_sid=8024bb&_nc_ohc=JMyk5HQYu0IAX-sw2Jy&_nc_ht=scontent.fymy1-2.fna&_nc_tp=6&oh=b05d4c7bca0e7644fbc9aa0cc564ae2c&oe=5F3D11DB"}} style={styles.banner} resizeMode="cover" />
 
       <Container style={{paddingVertical: 0}}>
         <ScrollView contentContainerStyle={{flexGrow: 1}}>
