@@ -3,15 +3,18 @@
     "name": "bikoz",
     "slug": "bikoz",
     "version": "1.0.0",
+    "description": "Protótipo de aplicativo para procura e oferta de empregos, vagas temporárias e bikoz",
+    "privacy": "unlisted",
+    "platforms": ["ios", "android"],
     "orientation": "portrait",
     "icon": "./assets/icon.png",
+    "backgroundColor": "#FAFAFA",
+    "primaryColor": "#3F47CC",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#FAFAFA"
     },
-    "backgroundColor": "#FAFAFA",
-    "primaryColor": "#3F47CC",
     "updates": {
       "fallbackToCacheTimeout": 0
     },
