@@ -26,6 +26,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
   import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { StatusBar } from 'expo-status-bar';
+import { Provider } from 'react-redux';
+import initStore from 'store/initStore';
 
 library.add(
   faFacebook,
@@ -47,10 +49,13 @@ if (__DEV__) {
   import("./ReactotronConfig").then(() => console.info("o pai ta on"));
 }
 
+const store = initStore({});
+store.subscribe(() => console.tron.log(store.getState()))
+
 export default function App() {
   return (
-    <>
-    <StatusBar backgroundColor={Constants.manifest.primaryColor}/>
+    <Provider store={store}>
+      <StatusBar backgroundColor={Constants.manifest.primaryColor}/>
       <SafeAreaView style={{flexGrow: 1}}>
           <NavigationContainer>
             <Navigator initialRouteName="inicio" screenOptions={{
@@ -70,6 +75,6 @@ export default function App() {
             </Navigator>
           </NavigationContainer>
       </SafeAreaView>
-    </>
+    </Provider>
   );
 }
