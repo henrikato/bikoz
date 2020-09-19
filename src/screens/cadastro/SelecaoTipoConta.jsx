@@ -3,14 +3,18 @@ import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import SegmentedControl from '@react-native-community/segmented-control';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import Constants from 'expo-constants';
 import Container from 'components/Container';
+import { useDispatch } from 'react-redux';
+import { cadastroParcial } from 'store/actions/usuarioActions';
+import Constants from 'expo-constants';
 
 export default () => {
   const navigation = useNavigation();
   navigation.setOptions({
     title: "Criação de conta"
   });
+
+  const dispatch = useDispatch();
 
   const [tipoConta, setTipoConta] = useState(0);
 
@@ -20,6 +24,11 @@ export default () => {
       case 1: return <Text>Você criará um perfil informando alguns dados pessoais e dados da sua empresa para que você possa disponibilizar suas vagas.</Text>
       default: <Text>Selecione um tipo de conta</Text>
     }
+  }
+
+  function continuar () {
+    dispatch(cadastroParcial({tipoConta}));
+    navigation.navigate("cadastroDadosUsuario");
   }
 
   return (
@@ -32,10 +41,10 @@ export default () => {
         activeTextColor="#FAFAFA"
         style={{marginVertical: 20}}
         selectedIndex={tipoConta}
-        onChange={({nativeEvent}) => setTipoConta(nativeEvent.selectedSegmentIndex)} />
+        onValueChange={value => setTipoConta(value)} />
       <MensagemTipoConta tipo={tipoConta}/>
 
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("cadastroDadosUsuario", {tipoConta})}>
+      <TouchableOpacity style={styles.button} onPress={continuar}>
         <Text style={styles.buttonLabel}>CONTINUAR</Text>
         <FontAwesomeIcon icon="chevron-right" color="#4CAF50" />
       </TouchableOpacity>

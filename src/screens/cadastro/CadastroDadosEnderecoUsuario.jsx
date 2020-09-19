@@ -1,17 +1,19 @@
 import React, { useRef } from 'react';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { Form } from '@unform/mobile';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import * as yup from 'yup';
+import { useDispatch } from 'react-redux';
 import Container from 'components/Container';
 import FormInput from 'components/FormInput';
 import FormPicker from 'components/FormPicker';
+import { cadastroParcial } from 'store/actions/usuarioActions';
 
 export default () => {
   const navigation = useNavigation();
-  const route = useRoute();
   navigation.setOptions({ title: "Dados de endereço" });
+  const dispatch = useDispatch();
 
   const _cidades = [
     {id: "Marília", value: "Marília"},
@@ -19,13 +21,12 @@ export default () => {
     {id: "São Paulo", value: "São Paulo"}];
   const _estados = [{id: "SP", value: "SP"}];
 
-  const dadosUsuario = route.params.data;
   const _form = useRef(null);
 
   function _validaForm(data, callback) {
     const schema = yup.object().shape({
       cep: yup.string().required("Informe o CEP").length(8, "Deve ser um CEP válido"),
-      endereco: yup.string().required("Informe o endereço"),
+      rua: yup.string().required("Informe o endereço"),
       numero: yup.string().required("Informe o número"),
       bairro: yup.string().required("Informe o nome do bairro"),
       cidade: yup.string().required("Selecione uma cidade"),
@@ -44,10 +45,10 @@ export default () => {
   }
 
   function _handleSubmit(data) {
-    // _validaForm(data, data => {
-      let dados = {...dadosUsuario, data};
-      navigation.navigate("cadastroDadosPerfilUsuario", {data});
-    // });
+    _validaForm(data, endereco => {
+      dispatch(cadastroParcial({endereco}));
+      navigation.navigate("cadastroDadosPerfilUsuario");
+    });
   }
 
   return <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 40}>
@@ -56,9 +57,9 @@ export default () => {
         <Text style={{marginBottom: 30}}>Após o preenchimento de suas informações pessoais, necessitamos de dados de seu endereço para melhor disponibilizarmos trabalhos disponiveis em sua região.</Text>
         
         <Form ref={_form} onSubmit={_handleSubmit}>
-          <FormInput name="cep" label="CEP" keyboardType="number-pad" helper="Informe o CEP da sua residência ou da empresa" />
+          <FormInput name="cep" label="CEP" keyboardType="number-pad" autoFocus helper="Informe o CEP da sua residência ou da empresa" />
 
-          <FormInput name="endereco" label="Endereço" helper="Informe o nome da rua ou avenida" />
+          <FormInput name="rua" label="Endereço" helper="Informe o nome da rua ou avenida" />
 
           <FormInput name="numero" label="Número" helper="Informe o número" keyboardType="number-pad" />
 

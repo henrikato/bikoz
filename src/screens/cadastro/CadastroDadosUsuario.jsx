@@ -1,18 +1,20 @@
 import React, { useRef, useState } from 'react';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { Form } from '@unform/mobile';
 import * as yup from 'yup';
+import { useSelector, useDispatch } from 'react-redux';
+import { cadastroParcial } from 'store/actions/usuarioActions';
 import Container from 'components/Container';
 import FormInput from 'components/FormInput';
 
 export default () => {
   const navigation = useNavigation();
-  const route = useRoute();
   navigation.setOptions({ title: "Informações básicas" });
+  const dispatch = useDispatch();
 
-  const tipoConta = route.params.tipoConta;
+  const tipoConta = useSelector(({cadastro}) => cadastro.tipoConta);
   const _form = useRef(null);
   const [hidePassword, setHidePassword] = useState(true);
 
@@ -55,9 +57,10 @@ export default () => {
   }
 
   function _handleSubmit(data) {
-    // _validaForm(data, data => {
-      navigation.navigate("cadastroDadosEnderecoUsuario", {data})
-    // });
+    _validaForm(data, data => {
+      dispatch(cadastroParcial(data))
+      navigation.navigate("cadastroDadosEnderecoUsuario")
+    });
   }
 
   return <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 40}>
@@ -66,7 +69,7 @@ export default () => {
         <Text style={{marginBottom: 30}}>Iniciando o processo de cadastro, você preencherá alguns dados básicos para o seu cadastro e informações pessoais para verificarmos sua identidade.</Text>
         
         <Form ref={_form} onSubmit={_handleSubmit}>
-          <FormInput name="nome" 
+          <FormInput name="nome" autoFocus 
             label={tipoConta === 0 ? "Nome completo" : "Nome Fantasia ou Razão Social"} 
             helper={`Informe ${tipoConta === 0 ? "o seu nome e sobrenome" : "o seu nome ou nome/razão social da sua empresa"}`} />
 
@@ -74,13 +77,18 @@ export default () => {
 
           <FormInput name="telefone" label="Telefone" keyboardType="number-pad" helper="Informe um telefone para contato" />
 
-          <FormInput name="email" label="E-mail" helper="Informe um e-mail de sua preferência" keyboardType="email-address" />
+          <FormInput name="email" label="E-mail" autoCapitalize="none" autoCorrect={false} helper="Informe um e-mail de sua preferência" keyboardType="email-address" />
 
           <FormInput name="cpfCnpj" 
             label={tipoConta === 0 ? "CPF" :"CNPJ"} 
             helper={`Informe ${tipoConta === 0 ? "o seu CPF" : "ou o CNPJ de sua empresa"}`} keyboardType="number-pad" />
 
-          <FormInput name="senha" label="Senha" helper="Digite a senha que será usada para acessar o aplicativo" secureTextEntry={hidePassword}>
+          <FormInput name="senha" 
+            label="Senha" 
+            helper="Digite a senha que será usada para acessar o aplicativo" 
+            textContentType="password" 
+            passwordRules="required: lower; required: upper; required: digit; required: [-]; minlength: 6;"
+            secureTextEntry={hidePassword}>
             <ButtonViewPassword />
           </FormInput>
 

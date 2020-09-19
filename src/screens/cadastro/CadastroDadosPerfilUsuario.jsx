@@ -1,19 +1,20 @@
 import React, { useRef, useState } from 'react';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, ScrollView, Platform, Alert, View } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { Form } from '@unform/mobile';
 import { Chip } from 'react-native-paper';
+import { useDispatch, useSelector } from 'react-redux';
+import { cadastrar, cadastroParcial } from 'store/actions/usuarioActions';
 import Constants from 'expo-constants';
 import Container from 'components/Container';
 import FormInput from 'components/FormInput';
 
 export default () => {
   const navigation = useNavigation();
-  const route = useRoute();
   navigation.setOptions({ title: "Dados profissionais" });
+  const dispatch = useDispatch();
 
-  const dadosUsuario = route.params.data;
   const _form = useRef(null);
   const [servicos, setServicos] = useState('');
 
@@ -35,12 +36,18 @@ export default () => {
     return lista.findIndex((s) => s === servico);
   }
 
+  const usuario = useSelector(({cadastro}) => cadastro);
   function _handleSubmit(data) {
-    let dados = {...dadosUsuario, data, servicosOferecidos: servicos};
-    Alert.alert("Sucesso", "Cadastrado com sucessso", [
-      { text: "Voltar", style: "cancel" },
-      { text: "OK", style: "default", onPress: () => navigation.navigate("inicio") }
-    ]);
+    let dados = {...usuario, perfil: {...data, servicoOferecido: servicos}};
+    dispatch(cadastrar(dados))
+      .then(res => {
+        console.tron.log("cadastrado", res)
+        Alert.alert("Sucesso", "Cadastrado com sucessso", [
+          { text: "Voltar", style: "cancel" },
+          { text: "OK", style: "default", onPress: () => navigation.navigate("inicio") }
+        ]);
+      })
+      .catch(err => console.tron.log("erro cadastro", err));
   }
 
   return (
@@ -67,9 +74,9 @@ export default () => {
               })}
             </View>
 
-            <FormInput name="experienciasAnteriores" label="Experiências anteriores" helper="Informe aqui detalhes sobre experiências profissionais anteriores (ex: empacotador por 3 meses no mercado...)" />
+            <FormInput name="experienciaAnterior" label="Experiências anteriores" helper="Informe aqui detalhes sobre experiências profissionais anteriores (ex: empacotador por 3 meses no mercado...)" />
 
-            <FormInput name="infoAdicional" multiline style={{marginTop: 5, height: 120}} label="Informações adicionais" helper="Informe aqui outras informações que você gostaria de adicionar ao seu perfil, como proficiência em outros idiomas." />
+            <FormInput name="observacao" multiline style={{marginTop: 5, height: 120}} label="Informações adicionais" helper="Informe aqui outras informações que você gostaria de adicionar ao seu perfil, como proficiência em outros idiomas." />
           </Form>
 
           <TouchableOpacity style={styles.button} onPress={() => _form.current.submitForm()}>
