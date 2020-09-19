@@ -1,8 +1,9 @@
 import React, { useRef, useState } from 'react';
-import { View, Alert, TouchableOpacity, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { View, TouchableOpacity, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Form } from '@unform/mobile';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import * as yup from 'yup';
 
 import Container from 'components/Container';
 import FormInput from 'components/FormInput';
@@ -10,6 +11,8 @@ import FlexImage from 'components/FlexImage';
 import Button from 'components/Button';
 
 import logo from 'assets/logo.png'
+import { useDispatch } from 'react-redux';
+import { loginRequest } from 'store/actions/autenticacaoActions';
 
 export default () => {
   const navigation = useNavigation();
@@ -20,23 +23,29 @@ export default () => {
   const _form = useRef(null);
   const [hidePassword, setHidePassword] = useState(true);
 
-  function _handleSubmit(data) {
-    // const schema = yup.object().shape({
-    //   login: yup.string().email("Informe um e-mail válido").required("Informe o seu login"),
-    //   senha: yup.string().min(6, "A senha possui no mínimo 6 caracteres.").required("Informe a sua senha")
-    // });
+  const dispatch = useDispatch();
 
-    // schema.validate(data, { abortEarly: false })
-    //   .then(data => {
-        navigation.reset({ index: 0, routes: [{name: "main"}] })
-      // })
-      // .catch(err => {
-      //   const validationErrors = {};
-      //   if(err instanceof yup.ValidationError) {
-      //     err.inner.forEach(erro => { validationErrors[erro.path] = erro.message });
-      //     _form.current.setErrors(validationErrors);
-      //   }
-      // });
+  function _handleSubmit(data) {
+    const schema = yup.object().shape({
+      login: yup.string().email("Informe um e-mail válido").required("Informe o seu login"),
+      senha: yup.string().min(6, "A senha possui no mínimo 6 caracteres.").required("Informe a sua senha")
+    });
+    navigation.reset({ index: 0, routes: [{name: "main"}] })
+    return;
+    schema.validate(data, { abortEarly: false })
+      .then(data => {
+        dispatch(loginRequest(data))
+          .then(res => console.tron.log("Retorno", res))
+          .catch(({error}) => console.tron.log("aa", error))
+        //navigation.reset({ index: 0, routes: [{name: "main"}] })
+      })
+      .catch(err => {
+        const validationErrors = {};
+        if(err instanceof yup.ValidationError) {
+          err.inner.forEach(erro => { validationErrors[erro.path] = erro.message });
+          _form.current.setErrors(validationErrors);
+        }
+      });
   }
 
   return (
@@ -46,8 +55,21 @@ export default () => {
           <FlexImage source={logo} style={{flexGrow: .5, width: 250, alignSelf: "center"}} />
 
           <Form ref={_form} onSubmit={_handleSubmit}>
-            <FormInput label="Login" name="login" keyboardType="email-address" autoCompleteType="email" helper="Informe o seu e-mail de login" />
-            <FormInput label="Senha" name="senha" secureTextEntry={hidePassword} autoCompleteType="password" helper="Informe a sua senha">
+            <FormInput label="Login" 
+              name="login" 
+              keyboardType="email-address" 
+              autoCapitalize="none"
+              autoFocus 
+              autoCorrect={false}
+              autoCompleteType="email" 
+              textContentType="emailAddress" 
+              helper="Informe o seu e-mail de login" />
+            <FormInput label="Senha" 
+              name="senha" 
+              secureTextEntry={hidePassword} 
+              autoCompleteType="password" 
+              textContentType="password" 
+              helper="Informe a sua senha">
               <TouchableOpacity onPress={() => setHidePassword(!hidePassword)} hitSlop={{top: 10, right: 10, bottom: 10, left: 10}}>
                 <FontAwesomeIcon icon={hidePassword ? "eye" : "eye-slash"} />
               </TouchableOpacity>
