@@ -8,7 +8,7 @@ import * as yup from 'yup';
 import Container from 'components/Container';
 import FormInput from 'components/FormInput';
 import FlexImage from 'components/FlexImage';
-import Button from 'components/Button';
+import {Button, IconButton} from 'react-native-paper';
 
 import logo from 'assets/logo.png'
 import { useDispatch } from 'react-redux';
@@ -30,14 +30,14 @@ export default () => {
       login: yup.string().email("Informe um e-mail válido").required("Informe o seu login"),
       senha: yup.string().min(6, "A senha possui no mínimo 6 caracteres.").required("Informe a sua senha")
     });
-    navigation.reset({ index: 0, routes: [{name: "main"}] })
-    return;
     schema.validate(data, { abortEarly: false })
       .then(data => {
         dispatch(loginRequest(data))
-          .then(res => console.tron.log("Retorno", res))
-          .catch(({error}) => console.tron.log("aa", error))
-        //navigation.reset({ index: 0, routes: [{name: "main"}] })
+          .then(res => {
+            console.tron.log("Login", res);
+            navigation.reset({ index: 0, routes: [{name: "main"}] })
+          })
+          .catch(({error}) => console.tron.log("Erro no Login", error))
       })
       .catch(err => {
         const validationErrors = {};
@@ -64,27 +64,32 @@ export default () => {
               autoCompleteType="email" 
               textContentType="emailAddress" 
               helper="Informe o seu e-mail de login" />
+
             <FormInput label="Senha" 
               name="senha" 
               secureTextEntry={hidePassword} 
               autoCompleteType="password" 
               textContentType="password" 
-              helper="Informe a sua senha">
-              <TouchableOpacity onPress={() => setHidePassword(!hidePassword)} hitSlop={{top: 10, right: 10, bottom: 10, left: 10}}>
-                <FontAwesomeIcon icon={hidePassword ? "eye" : "eye-slash"} />
-              </TouchableOpacity>
-            </FormInput>
+              helper="Informe a sua senha"
+              right={
+                <IconButton icon={props => <FontAwesomeIcon icon={hidePassword ? "eye" : "eye-slash"} {...props} />}
+                  color="#222222"
+                  size={16}
+                  onPress={() => setHidePassword(!hidePassword)} />
+              }/>
           </Form>
 
           <View>
-            <Button style={{backgroundColor: "#4CAF50"}} 
-              labelStyle={{ color: "#FAFAFA" }} 
-              underlayColor="#388e3b" 
+            <Button style={{marginBottom: 20}} 
+              mode="contained" 
+              color="#4CAF50" 
+              labelStyle={{ color: "#FAFAFA" }}               
               onPress={() => _form.current.submitForm()}>
-              LOGIN
+                LOGIN
             </Button>
 
-            <Button style={{backgroundColor: "#EFEFEF"}} 
+            <Button mode="contained" 
+              color="#EFEFEF" 
               labelStyle={{color: "#222"}}
               onPress={() => _form.current.submitForm()}>
                 ESQUECI MINHA SENHA

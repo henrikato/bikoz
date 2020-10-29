@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { Text, StyleSheet, KeyboardAvoidingView, ScrollView, Platform, View } from 'react-native';
 import { Form } from '@unform/mobile';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import * as yup from 'yup';
@@ -9,6 +9,7 @@ import Container from 'components/Container';
 import FormInput from 'components/FormInput';
 import FormPicker from 'components/FormPicker';
 import { cadastroParcial } from 'store/actions/usuarioActions';
+import { Button } from 'react-native-paper';
 
 export default () => {
   const navigation = useNavigation();
@@ -26,7 +27,7 @@ export default () => {
   function _validaForm(data, callback) {
     const schema = yup.object().shape({
       cep: yup.string().required("Informe o CEP").length(8, "Deve ser um CEP válido"),
-      rua: yup.string().required("Informe o endereço"),
+      logradouro: yup.string().required("Informe o endereço"),
       numero: yup.string().required("Informe o número"),
       bairro: yup.string().required("Informe o nome do bairro"),
       cidade: yup.string().required("Selecione uma cidade"),
@@ -59,23 +60,23 @@ export default () => {
         <Form ref={_form} onSubmit={_handleSubmit}>
           <FormInput name="cep" label="CEP" keyboardType="number-pad" autoFocus helper="Informe o CEP da sua residência ou da empresa" />
 
-          <FormInput name="rua" label="Endereço" helper="Informe o nome da rua ou avenida" />
+          <FormInput name="logradouro" label="Endereço" helper="Informe o nome da rua ou avenida" />
 
           <FormInput name="numero" label="Número" helper="Informe o número" keyboardType="number-pad" />
 
           <FormInput name="complemento" label="Complemento" helper="(opcional)" />
 
           <FormInput name="bairro" label="Bairro" helper="Nome do bairro" />
+          <View style={{marginTop: 5}}></View>
+          <FormPicker name="cidade" label="Cidade" helper="Selecione uma cidade" itens={_cidades} />
 
-          <FormPicker name="cidade" label="Cidade" helper="Nome da cidade" itens={_cidades} />
-
-          <FormPicker name="estado" label="Estado" helper="Nome do estado" itens={_estados} />
+          <FormPicker name="estado" label="Estado" helper="Selecione um estado" itens={_estados} />
         </Form>
 
-        <TouchableOpacity style={styles.button} onPress={() => _form.current.submitForm()}>
-          <Text style={styles.buttonLabel}>CONTINUAR</Text>
-          <FontAwesomeIcon icon="chevron-right" color="#4CAF50" />
-        </TouchableOpacity>
+        <Button mode="outlined" color="#4CAF50" onPress={() => _form.current.submitForm()} style={styles.button}
+          icon={props => <FontAwesomeIcon icon="chevron-right" {...props} />}>
+          CONTINUAR
+        </Button>
       </Container>
     </ScrollView>
   </KeyboardAvoidingView>
@@ -83,19 +84,8 @@ export default () => {
 
 const styles = StyleSheet.create({
   button: {
-    margin: 10,
-    marginTop: 30,
-    padding: 10,
     alignSelf: "flex-end",
-    borderWidth: 2,
     borderColor: "#4CAF50",
-    borderRadius: 5,
-    flexDirection: "row"
+    marginTop: 20
   },
-  buttonLabel: {
-    letterSpacing: .5,
-    color: "#4CAF50",
-    marginRight: 5,
-    fontWeight: "600"
-  }
 });

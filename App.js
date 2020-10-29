@@ -3,6 +3,7 @@ import { SafeAreaView, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Constants from 'expo-constants';
+import { Provider as PaperProvider, DefaultTheme } from 'react-native-paper';
 
 import CadastroNavigation from 'navigation/CadastroNavigation';
 import MainNavigation from 'navigation/MainNavigation';
@@ -22,11 +23,14 @@ import {
   faInbox,
   faUser,
   faPencilAlt,
-  faPlus
+  faPlus,
+  faTimes,
+  faCheck,
+  faCaretDown
 } from '@fortawesome/free-solid-svg-icons';
   import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { StatusBar } from 'expo-status-bar';
-import { Provider } from 'react-redux';
+import { Provider as StoreProvider } from 'react-redux';
 import initStore from 'store/initStore';
 
 library.add(
@@ -35,13 +39,16 @@ library.add(
   faEye,
   faEyeSlash,
   faChevronRight,
+  faCaretDown,
   faSearch,
   faList,
   faClipboardList,
   faInbox,
   faUser,
   faPencilAlt,
-  faPlus);
+  faPlus,
+  faTimes,
+  faCheck);
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -52,29 +59,44 @@ if (__DEV__) {
 const store = initStore({});
 store.subscribe(() => console.tron.log(store.getState()))
 
+const AppTheme = {
+  ...DefaultTheme,
+  roundness: 5,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: Constants.manifest.primaryColor,
+    accent: Constants.manifest.primaryColor,
+    backgroundColor: "#FAFAFA",
+    surface: "#FAFAFA",
+    text: "#222222"
+  }
+}
+
 export default function App() {
   return (
-    <Provider store={store}>
-      <StatusBar backgroundColor={Constants.manifest.primaryColor}/>
-      <SafeAreaView style={{flexGrow: 1}}>
-          <NavigationContainer>
-            <Navigator initialRouteName="inicio" screenOptions={{
-              headerBackTitleVisible: false,
-              headerTintColor: "#222222",
-              headerStyle: { backgroundColor: "#FAFAFA", shadowOpacity: 0, elevation: 0 },
-              headerLeft: ({onPress, tintColor}) => (
-                <TouchableOpacity onPress={onPress} style={{marginLeft: 10}}>
-                  <FontAwesomeIcon icon="arrow-left" size={20} color={tintColor} />
-                </TouchableOpacity>
-              )
-            }}>
-              <Screen name="cadastro" component={CadastroNavigation} />
-              <Screen name="main" component={MainNavigation} options={{headerShown: false}} />
-              <Screen name="inicio" component={Inicio} />
-              <Screen name="login" component={Login} />
-            </Navigator>
-          </NavigationContainer>
-      </SafeAreaView>
-    </Provider>
+    <StoreProvider store={store}>
+      <PaperProvider theme={AppTheme}>
+        <StatusBar backgroundColor={Constants.manifest.primaryColor}/>
+        <SafeAreaView style={{flexGrow: 1}}>
+            <NavigationContainer>
+              <Navigator initialRouteName="inicio" screenOptions={{
+                headerBackTitleVisible: false,
+                headerTintColor: "#222222",
+                headerStyle: { backgroundColor: "#FAFAFA", shadowOpacity: 0, elevation: 0 },
+                headerLeft: ({onPress, tintColor}) => (
+                  <TouchableOpacity onPress={onPress} style={{marginLeft: 10}}>
+                    <FontAwesomeIcon icon="arrow-left" size={20} color={tintColor} />
+                  </TouchableOpacity>
+                )
+              }}>
+                <Screen name="cadastro" component={CadastroNavigation} />
+                <Screen name="main" component={MainNavigation} options={{headerShown: false}} />
+                <Screen name="inicio" component={Inicio} />
+                <Screen name="login" component={Login} />
+              </Navigator>
+            </NavigationContainer>
+        </SafeAreaView>
+      </PaperProvider>
+    </StoreProvider>
   );
 }

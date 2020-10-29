@@ -3,7 +3,7 @@ import { Text, StyleSheet, Image, ScrollView, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Constants from 'expo-constants';
 import Container from 'components/Container';
-import Button from 'components/Button';
+import { Button } from 'react-native-paper';
 
 export default () => {
   const navigation = useNavigation();

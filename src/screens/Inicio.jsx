@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import Constants from 'expo-constants';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { useNavigation } from '@react-navigation/native';
-import Button from 'components/Button';
+import { Button } from 'react-native-paper';
 import Container from 'components/Container';
 import FlexImage from 'components/FlexImage';
 
@@ -18,19 +18,18 @@ export default () => {
       <FlexImage source={logo} style={{flexGrow: .5, width: 300, alignSelf: "center"}} />
 
       <View>
-        <Button labelStyle={{ color: "#FAFAFA" }} 
-          style={{backgroundColor: "#4CAF50"}} 
-          underlayColor="#388e3b" 
-          onPress={() => navigation.navigate("login")}>
-          EFETUAR LOGIN
+        <Button color="#4CAF50" mode="contained" dark={true} onPress={() => navigation.navigate("login")}>
+            EFETUAR LOGIN
         </Button>
-        <Button style={styles.button} labelStyle={styles.buttonLabel} onPress={() => navigation.navigate("cadastro")}>CRIAR MINHA CONTA</Button>
+        <Button mode="contained" color="#FAFAFA" style={{marginTop: 40}} onPress={() => navigation.navigate("cadastro")}>
+          CRIAR MINHA CONTA
+        </Button> 
       </View>
 
-      <Button style={styles.button} labelStyle={{color: "#1877F2", marginLeft: 10}} 
-        icon={<FontAwesomeIcon icon={['fab', 'facebook']} color="#1877F2" />}>
-        LOGIN COM FACEBOOK
-      </Button>
+      <Button mode="contained" color="#FAFAFA" labelStyle={{color: "#217CEF"}} disabled
+        icon={props => <FontAwesomeIcon icon={['fab', 'facebook']} {...props}/>}>
+          LOGIN COM FACEBOOK
+        </Button>
     </Container>
   )
 }
@@ -39,11 +38,5 @@ const styles = StyleSheet.create({
   view: {
     backgroundColor: Constants.manifest.primaryColor,
     justifyContent: "space-evenly"
-  },
-  button: {
-    backgroundColor: "#EFEFEF"
-  },
-  buttonLabel: {
-    color: "#222222"
   }
 });

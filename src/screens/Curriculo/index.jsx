@@ -2,7 +2,7 @@ import React from 'react';
 import { KeyboardAvoidingView, ScrollView, Text, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Container from 'components/Container';
-import Button from 'components/Button';
+import { Button } from 'react-native-paper';
 import PageHeader from 'components/PageHeader';
 
 export default () => {

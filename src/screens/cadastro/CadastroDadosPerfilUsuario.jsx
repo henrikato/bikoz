@@ -1,14 +1,17 @@
 import React, { useRef, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, ScrollView, Platform, Alert, View } from 'react-native';
+import { Text, StyleSheet, KeyboardAvoidingView, ScrollView, Platform, Alert, View } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { Form } from '@unform/mobile';
-import { Chip } from 'react-native-paper';
+import { Button, Chip } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
 import { cadastrar, cadastroParcial } from 'store/actions/usuarioActions';
 import Constants from 'expo-constants';
 import Container from 'components/Container';
 import FormInput from 'components/FormInput';
+
+const _observacaoUsuario = "Informe aqui outras informações que você gostaria de adicionar ao seu perfil, como proficiência em outros idiomas.";
+const _observacaoEmpresa = "Informe aqui mais detalhes da sua empresa ou dos seus serviços.";
 
 export default () => {
   const navigation = useNavigation();
@@ -58,31 +61,43 @@ export default () => {
           
           <Form ref={_form} onSubmit={_handleSubmit}>
 
-            <Text style={{marginLeft: 10}}>Serviços oferecidos</Text>
-            <View style={styles.listaServicos}>
-              {_servicos.map((servico, idx) => {
-                let selected = _selected(servico) !== -1;
-                return (
-                  <Chip key={String(idx)} 
-                    selectedColor={Constants.manifest.primaryColor}
-                    selected={selected}
-                    onPress={() => _selecionaServico(servico,idx)}
-                    style={styles.servico}>
-                      {servico}
-                  </Chip>
-                )
-              })}
-            </View>
+            {usuario.tipoConta != 1 ? <>
+              <Text style={{marginLeft: 10}}>Serviços oferecidos</Text>
+              <View style={styles.listaServicos}>
+                {_servicos.map((servico, idx) => {
+                  let selected = _selected(servico) !== -1;
+                  return (
+                    <Chip key={String(idx)} 
+                      selectedColor={Constants.manifest.primaryColor}
+                      selected={selected}
+                      onPress={() => _selecionaServico(servico,idx)}
+                      style={styles.servico}>
+                        {servico}
+                    </Chip>
+                  )
+                })}
+              </View>
+            </> : 
+            <FormInput name="tipoEstabelecimento" 
+              label="Tipo de Estabelecimento" 
+              helper="Informe qual o tipo do seu estabelecimento ou o(s) serviço(s) que você oferece." />}
 
-            <FormInput name="experienciaAnterior" label="Experiências anteriores" helper="Informe aqui detalhes sobre experiências profissionais anteriores (ex: empacotador por 3 meses no mercado...)" />
+            {usuario.tipoConta == 0 && 
+            <FormInput name="experienciaAnterior" 
+            label="Experiências anteriores" 
+            helper="Informe aqui detalhes sobre experiências profissionais anteriores (ex: empacotador por 3 meses no mercado...)" />}
 
-            <FormInput name="observacao" multiline style={{marginTop: 5, height: 120}} label="Informações adicionais" helper="Informe aqui outras informações que você gostaria de adicionar ao seu perfil, como proficiência em outros idiomas." />
+            <FormInput name="observacao" 
+              multiline 
+              style={{marginTop: 5, height: 120}} 
+              label="Informações adicionais" 
+              helper={usuario.tipoConta == 0 ? _observacaoUsuario : _observacaoEmpresa} />
           </Form>
 
-          <TouchableOpacity style={styles.button} onPress={() => _form.current.submitForm()}>
-            <Text style={styles.buttonLabel}>CONTINUAR</Text>
-            <FontAwesomeIcon icon="chevron-right" color="#4CAF50" />
-          </TouchableOpacity>
+          <Button mode="outlined" color="#4CAF50" onPress={() => _form.current.submitForm()} style={styles.button}
+            icon={props => <FontAwesomeIcon icon="chevron-right" {...props} />}>
+            CONTINUAR
+          </Button>
         </Container>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -91,20 +106,9 @@ export default () => {
 
 const styles = StyleSheet.create({
   button: {
-    margin: 10,
-    marginTop: 30,
-    padding: 10,
     alignSelf: "flex-end",
-    borderWidth: 2,
     borderColor: "#4CAF50",
-    borderRadius: 5,
-    flexDirection: "row"
-  },
-  buttonLabel: {
-    letterSpacing: .5,
-    color: "#4CAF50",
-    marginRight: 5,
-    fontWeight: "600"
+    marginTop: 20
   },
   listaServicos: {
     flexWrap: "wrap",

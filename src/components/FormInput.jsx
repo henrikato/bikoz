@@ -1,8 +1,9 @@
 import React, { useRef, useEffect } from 'react';
-import { TextInput, StyleSheet, View, Text } from 'react-native';
 import { useField } from '@unform/core';
+import { View } from 'react-native';
+import { HelperText, TextInput } from 'react-native-paper';
 
-function FormInput ({label, helper, children, style, name, ...props}) {
+function FormInput ({label, helper, children, name, ...props}) {
   const _ref = useRef('');
 
   const { fieldName, registerField, defaultValue, error, clearError } = useField(name);
@@ -34,44 +35,20 @@ function FormInput ({label, helper, children, style, name, ...props}) {
     }
   }
 
-  return <View style={styles.fieldWrapper}>
-    <Text style={styles.fieldLabel}>{label}</Text>
-    <View style={[styles.fieldInputWrapper, { borderColor: error ? "#D20000" : "#888888" }]}>
-      <TextInput ref={_ref} 
-        defaultValue={defaultValue} 
-        onChangeText={_changeText} 
-        onFocus={clearError} 
-        style={[styles.fieldInput, style]} 
+  return (
+    <View style={{marginVertical: 5}}>
+      <TextInput ref={_ref} mode="outlined"
+        label={label}
+        dense={true}
+        error={error != null}
+        onChangeText={_changeText}
+        onFocus={clearError}
+        defaultValue={defaultValue}
         {...props} />
-      {children}
+        {children}
+      <HelperText type={error ? "error" : "info"}>{error || helper}</HelperText>
     </View>
-    <Text style={[styles.fieldHelper, { color: error ? "#D20000" : "#000000" }]}>{error || helper}</Text>
-  </View>
+  )
 }
 
 export default FormInput;
-
-const styles = StyleSheet.create({
-  fieldWrapper: { marginVertical: 10 },
-  fieldLabel: {
-    marginLeft: 10,
-    marginBottom: 2
-  },
-  fieldInputWrapper: {
-    flexDirection: "row",
-    borderWidth: 2,
-    borderColor: "#888888",
-    borderRadius: 5,
-    alignItems: "center",
-    paddingRight: 10
-  },
-  fieldInput: {
-    flexGrow: 1,
-    padding: 10,
-  },
-  fieldHelper: {
-    opacity: .7,
-    marginLeft: 10,
-    fontSize: 12
-  }
-})

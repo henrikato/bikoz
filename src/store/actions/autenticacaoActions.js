@@ -8,7 +8,7 @@ export const loginRequest = (login) => ({
   payload: {
     request: {
       method: "POST",
-      url: "/login",
+      url: "/usuario/login",
       data: login
     },
   }

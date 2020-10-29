@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { Text, StyleSheet, TouchableOpacity, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { Form } from '@unform/mobile';
 import * as yup from 'yup';
@@ -8,6 +8,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { cadastroParcial } from 'store/actions/usuarioActions';
 import Container from 'components/Container';
 import FormInput from 'components/FormInput';
+import { Button } from 'react-native-paper';
+import Constants from 'expo-constants';
 
 export default () => {
   const navigation = useNavigation();
@@ -88,19 +90,22 @@ export default () => {
             helper="Digite a senha que será usada para acessar o aplicativo" 
             textContentType="password" 
             passwordRules="required: lower; required: upper; required: digit; required: [-]; minlength: 6;"
-            secureTextEntry={hidePassword}>
-            <ButtonViewPassword />
+            secureTextEntry={hidePassword}
+            right={<ButtonViewPassword />}>
           </FormInput>
 
-          <FormInput name="confirmaSenha" label="Confirme sua senha" helper="Confirme a senha que será utilizada" secureTextEntry={hidePassword}>
-            <ButtonViewPassword />
+          <FormInput name="confirmaSenha" 
+            label="Confirme sua senha" 
+            helper="Confirme a senha que será utilizada" 
+            secureTextEntry={hidePassword}
+            right={<ButtonViewPassword />}>
           </FormInput>
         </Form>
 
-        <TouchableOpacity style={styles.button} onPress={() => _form.current.submitForm()}>
-          <Text style={styles.buttonLabel}>CONTINUAR</Text>
-          <FontAwesomeIcon icon="chevron-right" color="#4CAF50" />
-        </TouchableOpacity>
+        <Button mode="outlined" color="#4CAF50" onPress={() => _form.current.submitForm()} style={styles.button}
+          icon={props => <FontAwesomeIcon icon="chevron-right" {...props} />}>
+          CONTINUAR
+        </Button>
       </Container>
     </ScrollView>
   </KeyboardAvoidingView>
@@ -108,19 +113,8 @@ export default () => {
 
 const styles = StyleSheet.create({
   button: {
-    margin: 10,
-    marginTop: 30,
-    padding: 10,
     alignSelf: "flex-end",
-    borderWidth: 2,
     borderColor: "#4CAF50",
-    borderRadius: 5,
-    flexDirection: "row"
-  },
-  buttonLabel: {
-    letterSpacing: .5,
-    color: "#4CAF50",
-    marginRight: 5,
-    fontWeight: "600"
+    marginTop: 30
   }
 });
