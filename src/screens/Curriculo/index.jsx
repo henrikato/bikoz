@@ -2,8 +2,9 @@ import React from 'react';
 import { KeyboardAvoidingView, ScrollView, Text, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Container from 'components/Container';
-import { Button } from 'react-native-paper';
-import PageHeader from 'components/PageHeader';
+import { Button, Divider, List } from 'react-native-paper';
+import { Title } from 'native-base';
+import ListItem from 'components/ListItem';
 
 export default () => {
   const navigation = useNavigation();
@@ -13,19 +14,26 @@ export default () => {
     <KeyboardAvoidingView style={{flexGrow: 1}} behavior="padding" keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 40}>
       <ScrollView contentContainerStyle={{flexGrow: 1}}>
         <Container>
-          <PageHeader>Meu currículo</PageHeader>
+          <Title>Meu currículo</Title>
 
-          <Text style={styles.subHeader}>Experiências</Text>
-          <Text>Garçom por 3 meses, empacotador por 4 meses, motoboy por 5 meses</Text>
+          <List.Section>
+            <ListItem 
+              title="Experiências" 
+              description="Informe aqui suas experiências prévias em outros empregos ou serviços" />
+            <Divider />
 
-          <Text style={styles.subHeader}>Serviços oferecidos</Text>
-          <Text>Garçom, Empacotador, Motoboy, Eletricista</Text>
+            <ListItem 
+              title="Serviços oferecidos" 
+              description="Informe aqui quais os serviços que você oferece ou é capacitado" />
+            <Divider />
 
-          <Text style={styles.subHeader}>Informações adicionais</Text>
-          <Text>Formado em Engenharia Elétrica</Text>
+            <ListItem 
+              title="Informações adicionais" 
+              description="Insira outras informações que gostaria de adicionar ao seu currículo (ex: conhecimento de outros idiomas)" />
+          </List.Section>
 
           <View style={{flexGrow: 1, justifyContent: "flex-end"}}>
-            <Button style={{marginTop: 20}} onPress={() => navigation.navigate("editarCurriculo")}>EDITAR MEU  CURRÍCULO</Button>
+            <Button mode="contained" style={{marginTop: 20}} onPress={() => navigation.navigate("editarCurriculo")}>EDITAR MEU CURRÍCULO</Button>
           </View>
         </Container>
       </ScrollView>

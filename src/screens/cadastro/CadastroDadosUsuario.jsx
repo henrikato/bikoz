@@ -9,7 +9,7 @@ import { cadastroParcial } from 'store/actions/usuarioActions';
 import Container from 'components/Container';
 import FormInput from 'components/FormInput';
 import { Button } from 'react-native-paper';
-import Constants from 'expo-constants';
+import { differenceInYears, parse } from 'date-fns';
 
 export default () => {
   const navigation = useNavigation();
@@ -30,7 +30,12 @@ export default () => {
     const schema = yup.object().shape({
       tipoConta: yup.number().default(tipoConta),
       nome: yup.string().required("Informe o seu nome"),
-      idade: yup.number().min(18, "Somente maiores de 18 anos podem usar a plataforma"),
+      dataNascimento: yup.string().when("tipoConta", {
+        is: 0,
+        then: yup.string().test("Data de nascimento", "Somente maiores de 18 anos podem usar a plataforma",
+          data => differenceInYears(new Date(), parse(data)) >= 18),
+        otherwise: yup.string().nullable()
+      }),
       telefone: yup.string().min(10, "Informe um telefone válido").max(11, "Informe um telefone válido"),
       email: yup.string().email("Informe um e-mail válido").required("Informe um e-mail"),
       cpfCnpj: yup.string().when('tipoConta', {

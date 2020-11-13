@@ -1,1 +1,1 @@
-export const FormatarEnderecoSimples = ({endereco, numero}) => `${endereco}, ${numero}`;
+export const FormatarEnderecoSimples = ({logradouro, numero}) => `${logradouro}, ${numero}`;

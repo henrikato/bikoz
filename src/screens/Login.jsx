@@ -13,6 +13,7 @@ import {Button, IconButton} from 'react-native-paper';
 import logo from 'assets/logo.png'
 import { useDispatch } from 'react-redux';
 import { loginRequest } from 'store/actions/autenticacaoActions';
+import { Toast } from 'native-base';
 
 export default () => {
   const navigation = useNavigation();
@@ -37,7 +38,11 @@ export default () => {
             console.tron.log("Login", res);
             navigation.reset({ index: 0, routes: [{name: "main"}] })
           })
-          .catch(({error}) => console.tron.log("Erro no Login", error))
+          .catch(() => Toast.show({
+            text: "Login inválido",
+            duration: 3000,
+            type: "warning"
+          }))
       })
       .catch(err => {
         const validationErrors = {};

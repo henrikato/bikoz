@@ -26,7 +26,7 @@ const initialState = {
 
 export function cadastro(state = initialState, action) {
   switch (action.type) {
-    case CADASTRO_ERROR:
+    case CADASTRO_ERROR: return { ...state, error: action.error }
     case CADASTRO_PARCIAL: return {...state, ...action.payload}
     case CADASTRO: return state;
     default: return state;

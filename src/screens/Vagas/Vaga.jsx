@@ -1,15 +1,24 @@
 import React from 'react';
 import { Text, StyleSheet, Image, ScrollView, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import Constants from 'expo-constants';
 import Container from 'components/Container';
 import { Button } from 'react-native-paper';
+import { FormatarEnderecoSimples } from 'util/FormatarEndereco';
+import { FormatarHorarioVaga } from 'util/FormatarHorario';
+
+const currFormat = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
 
 export default () => {
   const navigation = useNavigation();
+  const route = useRoute();
+
+  const vaga = route.params.detalhes;
+
   navigation.setOptions({
-    headerTitle: ({style}) => <Text style={[style, {color: "#FAFAFA"}]}>Bico de Garçom - DOCTOR BEER</Text>
+    headerTitle: ({style}) => <Text style={[style, {color: "#FAFAFA"}]}>{vaga.nome}</Text>
   });
+
 
   return (
     <>
@@ -17,15 +26,15 @@ export default () => {
 
       <Container style={{paddingVertical: 0}}>
         <ScrollView contentContainerStyle={{flexGrow: 1}}>
-          <Text style={styles.nomeOfertante}>DOCTOR BEER</Text>
+          <Text style={styles.nomeOfertante}>{vaga.anunciante.nome}</Text>
 
-          <Text style={styles.detalhes}>Av. Rio Branco, 1231</Text>
-          <Text style={styles.detalhes}>Telefone: (14) 3422-5078</Text>
+          <Text style={styles.detalhes}>{FormatarEnderecoSimples(vaga.anunciante.endereco)}</Text>
+          <Text style={styles.detalhes}>Telefone: {vaga.anunciante.telefone}</Text>
           <Text style={styles.detalhes}>Dias de trabalho: 1</Text>
-          <Text style={styles.detalhes}>21/08 das 19:00h às 00:00h</Text>
-          <Text style={styles.detalhes}>Valor: R$600,00</Text>
+          <Text style={styles.detalhes}>13/11 {FormatarHorarioVaga(vaga)}</Text>
+          <Text style={styles.detalhes}>Valor: {currFormat.format(vaga.valor)}</Text>
           
-          <Text style={styles.descricao}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce dictum sodales tempus. Quisque tempor, nibh vitae faucibus pretium, est leo dapibus quam, porttitor pulvinar sapien sapien quis odio.</Text>
+          <Text style={styles.descricao}>{vaga.descricao}</Text>
           
           <View style={{flexGrow: 1, justifyContent: "flex-end"}}>
             <Button style={styles.button}

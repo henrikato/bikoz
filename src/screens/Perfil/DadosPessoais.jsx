@@ -1,9 +1,10 @@
 import React from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Divider } from 'react-native-paper';
+import { Divider, List } from 'react-native-paper';
 import Container from 'components/Container';
-import MenuItem from 'components/MenuItem';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import ListItem from 'components/ListItem';
 
 export default () => {
   const navigation = useNavigation();
@@ -28,9 +29,11 @@ export default () => {
       </View>
       <Divider />
 
-      <MenuItem label="Formas de contato" />
-      <Divider />
-      <MenuItem label="Formas de recebimento" />
+      <List.Section>
+        <ListItem title="Formas de contato" />
+        <Divider />
+        <ListItem title="Formas de recebimento" />
+      </List.Section>
     </Container>
   )
 }

@@ -5,10 +5,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { Form } from '@unform/mobile';
 import { Button, Chip } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
-import { cadastrar, cadastroParcial } from 'store/actions/usuarioActions';
-import Constants from 'expo-constants';
+import { cadastrar } from 'store/actions/usuarioActions';
 import Container from 'components/Container';
 import FormInput from 'components/FormInput';
+import FormDatePicker from 'components/FormDatePicker';
 
 const _observacaoUsuario = "Informe aqui outras informações que você gostaria de adicionar ao seu perfil, como proficiência em outros idiomas.";
 const _observacaoEmpresa = "Informe aqui mais detalhes da sua empresa ou dos seus serviços.";
@@ -19,29 +19,10 @@ export default () => {
   const dispatch = useDispatch();
 
   const _form = useRef(null);
-  const [servicos, setServicos] = useState('');
-
-  const _servicos = ["Garçom", "Eletricista", "Entregador", "Outro"];
-
-  function _selecionaServico (servico) {
-    let lista = servicos.split(',');
-    let idx = _selected(servico);
-    if(idx !== -1) {
-      lista.splice(idx);
-    } else {
-      lista.push(servico);
-    }
-    setServicos(lista.join(','));
-  }
-
-  function _selected (servico) {
-    let lista = servicos.split(',');
-    return lista.findIndex((s) => s === servico);
-  }
-
+  
   const usuario = useSelector(({cadastro}) => cadastro);
   function _handleSubmit(data) {
-    let dados = {...usuario, perfil: {...data, servicoOferecido: servicos}};
+    let dados = {...usuario, perfil: data};
     dispatch(cadastrar(dados))
       .then(res => {
         console.tron.log("cadastrado", res)
@@ -62,30 +43,26 @@ export default () => {
           <Form ref={_form} onSubmit={_handleSubmit}>
 
             {usuario.tipoConta != 1 ? <>
-              <Text style={{marginLeft: 10}}>Serviços oferecidos</Text>
-              <View style={styles.listaServicos}>
-                {_servicos.map((servico, idx) => {
-                  let selected = _selected(servico) !== -1;
-                  return (
-                    <Chip key={String(idx)} 
-                      selectedColor={Constants.manifest.primaryColor}
-                      selected={selected}
-                      onPress={() => _selecionaServico(servico,idx)}
-                      style={styles.servico}>
-                        {servico}
-                    </Chip>
-                  )
-                })}
-              </View>
-            </> : 
-            <FormInput name="tipoEstabelecimento" 
-              label="Tipo de Estabelecimento" 
-              helper="Informe qual o tipo do seu estabelecimento ou o(s) serviço(s) que você oferece." />}
+              <FormInput name="servicoOferecido" 
+                label="Serviços oferecidos" 
+                helper="Informe quais tipos de serviço você pode oferecer ou tem experiência (ex: Encanador, Eletricista, Garçom, Motoboy)." />
+              </> : 
+              <FormInput name="tipoEstabelecimento" 
+                label="Tipo de Estabelecimento" 
+                helper="Informe qual o tipo do seu estabelecimento ou o(s) serviço(s) que você oferece." />
+            }
 
             {usuario.tipoConta == 0 && 
             <FormInput name="experienciaAnterior" 
             label="Experiências anteriores" 
             helper="Informe aqui detalhes sobre experiências profissionais anteriores (ex: empacotador por 3 meses no mercado...)" />}
+
+            {usuario.tipoConta == 1 && <>
+              <Text>Horário de funcionamento</Text>
+              <FormDatePicker name="horaAbertura" label="Abertura" defaultValue={new Date()} />
+              <FormDatePicker name="horaFechamento" label="Fechamento" defaultValue={new Date()} />
+              </>
+            }
 
             <FormInput name="observacao" 
               multiline 

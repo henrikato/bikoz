@@ -1,67 +1,68 @@
 import React from 'react';
 import { View, TextInput, StyleSheet, TouchableHighlight, Text, FlatList } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import moment from 'moment';
 import Constants from 'expo-constants';
 import Container from 'components/Container';
-import PageHeader from 'components/PageHeader';
 import FlexImage from 'components/FlexImage';
 import { FormatarEnderecoSimples } from 'util/FormatarEndereco';
 import { FormatarHorarioVaga } from 'util/FormatarHorario';
+import { listarVagas } from 'store/actions/vagaActions';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { Subtitle, Title } from 'native-base';
+import { Divider } from 'react-native-paper';
 
-export default () => {
-  const navigation = useNavigation();
-  navigation.setOptions({headerLeft: null});
+const mapDispatchToProps = dispatch => bindActionCreators({listarVagas}, dispatch);
 
-  const _vagas = [
-    {
-      id: 0,
-      titulo: "Bico de Garçom",
-      ofertante: {
-        nome: "DOCTOR BEER",
-      },
-      endereco: {
-        endereco: "Av. Rio Branco",
-        numero: "1231"
-      },
-      imagem: "https://scontent.fymy1-2.fna.fbcdn.net/v/t1.0-9/p720x720/103901952_1510217042494005_4737862598436095576_o.jpg?_nc_cat=105&_nc_sid=8024bb&_nc_ohc=JMyk5HQYu0IAX-sw2Jy&_nc_ht=scontent.fymy1-2.fna&_nc_tp=6&oh=b05d4c7bca0e7644fbc9aa0cc564ae2c&oe=5F3D11DB",
-      dataHoraInicio: moment("2020-08-21T19:00:00"),
-      dataHoraFim: moment("2020-08-22T00:00:00")
+class Vagas extends React.Component {
+  constructor(props) {
+    super(props);
+
+    props.navigation.setOptions({headerLeft: null});
+
+    this.state = {
+      vagas: []
     }
-  ]
+  }
+  componentDidMount() {
+    this.props.listarVagas().then(({payload: {data}}) => this.setState({vagas: data}))
+  }
 
-  const renderizaVaga = ({id, titulo, imagem, ofertante, endereco, ...props}) => (
-    <TouchableHighlight style={styles.vaga} underlayColor="#E7E7E7" onPress={() => navigation.navigate("vaga")}>
+  renderizaVaga = ({item}) => (
+    <TouchableHighlight style={styles.vaga} underlayColor="#E7E7E7" onPress={() => this.props.navigation.navigate("vaga", {detalhes: item})}>
       <View style={styles.conteudoVaga}>
-        <FlexImage source={{uri: imagem}} style={styles.imgVaga} />
-        <View>
-          <Text style={styles.tituloVaga}>{titulo} - {ofertante.nome}</Text>
-          <Text style={styles.subTituloVaga}>{FormatarEnderecoSimples(endereco)}</Text>
-          <Text style={styles.subTituloVaga}>{FormatarHorarioVaga(props)}</Text>
+        <FlexImage source={{uri: item.imagem}} style={styles.imgVaga} />
+        <View style={{ flex: 1 }}>
+          <Text style={styles.tituloVaga} numberOfLines={1} ellipsizeMode="tail">{item.nome} - {item.anunciante.nome}</Text>
+          <Text style={styles.subTituloVaga}>{FormatarEnderecoSimples(item.anunciante.endereco)}</Text>
+          <Text style={styles.subTituloVaga}>{FormatarHorarioVaga(item)}</Text>
         </View>
       </View>
     </TouchableHighlight>
   )
 
-  return (
-    <>
-      <View style={styles.searchBarWrapper}>
-        <View style={styles.searchBar}>
-          <TextInput style={styles.searchInput} placeholder="Procure por uma vaga..." />
-          <FontAwesomeIcon icon="search" style={{marginRight: 10}} />
+  render() {
+    return (
+      <>
+        <View style={styles.searchBarWrapper}>
+          <View style={styles.searchBar}>
+            <TextInput style={styles.searchInput} placeholder="Procure por uma vaga..." />
+            <FontAwesomeIcon icon="search" style={{marginRight: 10}} />
+          </View>
         </View>
-      </View>
-      <Container>
-        <PageHeader>Vagas anunciadas</PageHeader>
-        <FlatList data={_vagas} 
-          renderItem={({item}) => renderizaVaga(item)} 
-          ListEmptyComponent={<Text>Nenhuma vaga disponível no momento.</Text>}
-          keyExtractor={({id}) => String(id)} />
-      </Container>
-    </>
-  )
+        <Container>
+          <Title>Vagas anunciadas</Title>
+          <FlatList data={this.state.vagas} 
+            renderItem={this.renderizaVaga}
+            keyExtractor={({id}) => String(id)}
+            ListEmptyComponent={<Subtitle>Opa, parece que ainda não temos nenhuma oportunidade para você.</Subtitle>} />
+        </Container>
+      </>
+    )
+  }
 }
+
+export default connect(null, mapDispatchToProps)(Vagas);
 
 const styles = StyleSheet.create({
   searchBarWrapper: {

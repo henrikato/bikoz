@@ -1,11 +1,13 @@
 import React from 'react';
-import { Text, Linking } from 'react-native';
+import { Linking } from 'react-native';
 import Container from 'components/Container';
-import MenuItem from 'components/MenuItem';
+import { List } from 'react-native-paper';
 
 export default () => (
   <Container>
-    <MenuItem label="Avalie-nos na loja" />
-    <MenuItem label="Sobre este aplicativo" onPress={() => Linking.openSettings()} />
+    <List.Section>
+      <List.Item title="Avalie-nos na loja" />
+      <List.Item title="Sobre este aplicativo" onPress={() => Linking.openSettings()} />
+    </List.Section>
   </Container>
 )

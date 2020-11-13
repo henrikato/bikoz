@@ -29,10 +29,10 @@ const Tabs = () => (
       activeTintColor: "#FAFAFA",
       inactiveTintColor: "rgba(250, 250, 250, .6)"
     }}>
-    <TabScreen name="mensagens" component={Mensagens} options={{
+    {/* <TabScreen name="mensagens" component={Mensagens} options={{
       title: "Mensagens",
       tabBarIcon: ({focused, ...props}) => <FontAwesomeIcon icon="inbox" {...props} />
-    }} />
+    }} /> */}
     <TabScreen name="curriculo" component={Curriculo} options={{
       title: "Currículo",
       tabBarIcon: ({focused, ...props}) => <FontAwesomeIcon icon="clipboard-list" {...props} />
