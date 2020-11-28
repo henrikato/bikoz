@@ -3,13 +3,21 @@ import { SafeAreaView, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Constants from 'expo-constants';
-import { Provider as PaperProvider, DefaultTheme } from 'react-native-paper';
+import { Provider as PaperProvider, DefaultTheme, ActivityIndicator } from 'react-native-paper';
+
+import { StatusBar } from 'expo-status-bar';
+import { Provider as StoreProvider } from 'react-redux';
+import { Root } from 'native-base';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { PersistGate } from 'redux-persist/integration/react';
+import configureStore from 'store/configureStore';
 
 import CadastroNavigation from 'navigation/CadastroNavigation';
 import MainNavigation from 'navigation/MainNavigation';
 import Inicio from 'screens/Inicio';
 import Login from 'screens/Login';
 
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faFacebook } from '@fortawesome/free-brands-svg-icons';
 import {
@@ -29,12 +37,6 @@ import {
   faCaretDown,
   faPowerOff
 } from '@fortawesome/free-solid-svg-icons';
-  import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { StatusBar } from 'expo-status-bar';
-import { Provider as StoreProvider } from 'react-redux';
-import initStore from 'store/initStore';
-import { Root } from 'native-base';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 library.add(
   faFacebook,
@@ -60,8 +62,8 @@ if (__DEV__) {
   import("./ReactotronConfig").then(() => console.info("o pai ta on"));
 }
 
-const store = initStore({});
-store.subscribe(() => AsyncStorage.setItem("PERSISTENT_DATA", JSON.parse(store.getState())))
+let { store, persistor } = configureStore();
+store.subscribe(() => console.tron.log(store.getState()))
 
 const AppTheme = {
   ...DefaultTheme,
@@ -79,30 +81,32 @@ const AppTheme = {
 export default function App() {
   return (
     <StoreProvider store={store}>
-      <PaperProvider theme={AppTheme}>
-        <Root>
-          <StatusBar backgroundColor={Constants.manifest.primaryColor}/>
-          <SafeAreaView style={{flexGrow: 1}}>
-              <NavigationContainer>
-                <Navigator initialRouteName="inicio" screenOptions={{
-                  headerBackTitleVisible: false,
-                  headerTintColor: "#222222",
-                  headerStyle: { backgroundColor: "#FAFAFA", shadowOpacity: 0, elevation: 0 },
-                  headerLeft: ({onPress, tintColor}) => (
-                    <TouchableOpacity onPress={onPress} style={{marginLeft: 10}}>
-                      <FontAwesomeIcon icon="arrow-left" size={20} color={tintColor} />
-                    </TouchableOpacity>
-                  )
-                }}>
-                  <Screen name="cadastro" component={CadastroNavigation} />
-                  <Screen name="main" component={MainNavigation} options={{headerShown: false}} />
-                  <Screen name="inicio" component={Inicio} />
-                  <Screen name="login" component={Login} />
-                </Navigator>
-              </NavigationContainer>
-          </SafeAreaView>
-        </Root>
-      </PaperProvider>
+      <PersistGate persistor={persistor} loading={<ActivityIndicator animating />}>
+        <PaperProvider theme={AppTheme}>
+          <Root>
+            <StatusBar backgroundColor={Constants.manifest.primaryColor}/>
+            <SafeAreaView style={{flexGrow: 1}}>
+                <NavigationContainer>
+                  <Navigator initialRouteName="inicio" screenOptions={{
+                    headerBackTitleVisible: false,
+                    headerTintColor: "#222222",
+                    headerStyle: { backgroundColor: "#FAFAFA", shadowOpacity: 0, elevation: 0 },
+                    headerLeft: ({onPress, tintColor}) => (
+                      <TouchableOpacity onPress={onPress} style={{marginLeft: 10}}>
+                        <FontAwesomeIcon icon="arrow-left" size={20} color={tintColor} />
+                      </TouchableOpacity>
+                    )
+                  }}>
+                    <Screen name="cadastro" component={CadastroNavigation} />
+                    <Screen name="main" component={MainNavigation} options={{headerShown: false}} />
+                    <Screen name="inicio" component={Inicio} />
+                    <Screen name="login" component={Login} />
+                  </Navigator>
+                </NavigationContainer>
+            </SafeAreaView>
+          </Root>
+        </PaperProvider>
+      </PersistGate>
     </StoreProvider>
   );
 }

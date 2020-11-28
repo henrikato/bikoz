@@ -3,36 +3,38 @@ import { Text, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Divider, List } from 'react-native-paper';
 import Container from 'components/Container';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import ListItem from 'components/ListItem';
+import ListItem, { ListIcon } from 'components/ListItem';
+import { useSelector } from 'react-redux';
 
 export default () => {
   const navigation = useNavigation();
 
+  const { tipoConta, usuario: { nome, cpfCnpj, email } } = useSelector(({login}) => login);
+
   return (
     <Container>
       <View style={styles.info}>
-        <Text style={styles.header}>NOME COMPLETO</Text>
-        <Text style={styles.value}>Fulano de Tal</Text>
+        <Text style={styles.header}>{ tipoConta ? 'NOME / RAZÃO SOCIAL' : 'NOME COMPLETO' }</Text>
+        <Text style={styles.value}>{nome}</Text>
       </View>
       <Divider />
 
       <View style={styles.info}>
-        <Text style={styles.header}>IDENTIFICAÇÃO</Text>
-        <Text style={styles.value}>987.654.321-00</Text>
+        <Text style={styles.header}>CPF ou CNPJ</Text>
+        <Text style={styles.value}>{cpfCnpj}</Text>
       </View>
       <Divider />
 
       <View style={styles.info}>
         <Text style={styles.header}>E-MAIL</Text>
-        <Text style={styles.value}>fulano.tal@gmail.com</Text>
+        <Text style={styles.value}>{email}</Text>
       </View>
       <Divider />
 
       <List.Section>
-        <ListItem title="Formas de contato" />
+        <ListItem title="Formas de contato" right={props => <ListIcon {...props} />} />
         <Divider />
-        <ListItem title="Formas de recebimento" />
+        <ListItem title={`Formas de ${tipoConta ? 'pagamento' : 'recebimento'}`} right={props => <ListIcon {...props} />}  />
       </List.Section>
     </Container>
   )

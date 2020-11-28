@@ -22,13 +22,13 @@ mock.onPost("/usuario/login").reply(({data}) => {
   let { login } = JSON.parse(data);
 
   if (login.includes("candidato")) {
-    let { token, tipoConta, ...usuario } = MockData.candidato;
-    return [ 200, { usuario, token, tipoConta } ]
+    let { token, tipoConta, email } = MockData.candidato;
+    return [ 200, { login: email, token, tipoConta, usuario: MockData.candidato } ]
   }
   
   if (login.includes("anunciante")) {
-    let { token, tipoConta, ...usuario } = MockData.anunciante;
-    return [ 200, { usuario, token, tipoConta } ]
+    let { token, tipoConta, email } = MockData.anunciante;
+    return [ 200, { login: email, token, tipoConta, usuario: MockData.anunciante } ]
   }
 
   return [ 422, {} ]

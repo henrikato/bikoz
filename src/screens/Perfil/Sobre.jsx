@@ -1,13 +1,15 @@
 import React from 'react';
 import { Linking } from 'react-native';
 import Container from 'components/Container';
-import { List } from 'react-native-paper';
+import { Divider, List } from 'react-native-paper';
+import ListItem, { ListIcon } from 'components/ListItem';
 
 export default () => (
   <Container>
     <List.Section>
-      <List.Item title="Avalie-nos na loja" />
-      <List.Item title="Sobre este aplicativo" onPress={() => Linking.openSettings()} />
+      <ListItem title="Avalie-nos na loja" right={props => <ListIcon {...props} />} />
+      <Divider />
+      <ListItem title="Sobre este aplicativo" right={props => <ListIcon {...props} />} onPress={() => Linking.openSettings()} />
     </List.Section>
   </Container>
 )

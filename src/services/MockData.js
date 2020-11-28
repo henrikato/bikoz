@@ -1,8 +1,8 @@
 let candidato = {
-  id: 0,
+  id: 1,
   tipoConta: 0,
   perfilUsuario: {
-    usuarioId: 0,
+    usuarioId: 2,
     servicoOferecido: "Encanador, Eletricista, Garçom, Motoboy",
     experienciaAnterior: "Garçom por 3 meses",
     observacao: "Fluente em inglês, espanhol intermediário"
@@ -27,10 +27,10 @@ let candidato = {
 }
 
 let anunciante = {
-  id: 1,
+  id: 2,
   tipoConta: 1,
   perfilUsuario: {
-    usuarioId: 1,
+    usuarioId: 2,
     tipoEstabelecimento: "Lanchonete",
     observacao: "Lanchonete localizada no centro da cidade com anos de tradição",
     horaAbertura: "15:30h",
@@ -45,34 +45,51 @@ let anunciante = {
     cidade: "Marília",
     estado: "SP"
   },
-  nome: "Usuario Anunciante",
+  nome: "Burger House",
   telefone: "1434567890",
   email: "anunciante@bikoz.com",
   cpfCnpj: "76849349000164",
-  imagemPerfil: "https://image.freepik.com/vetores-gratis/delicious-burger-icon-food-beverages_22052-1.jpg",
+  imagemPerfil: "https://image.freepik.com/vetores-gratis/vintage-do-logotipo-de-burger-house_71835-167.jpg",
   senha: "123123a",
   token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiaWQiOjEsInRpcG9Db250YSI6MSwibm9tZSI6IlVzdWFyaW8gQW51bmNpYW50ZSIsInRlbGVmb25lIjoiMTQzNDU2Nzg5MCIsImVtYWlsIjoiYW51bmNpYW50ZUBiaWtvei5jb20iLCJjcGZDbnBqIjoiNzY4NDkzNDkwMDAxNjQiLCJpYXQiOjE1MTYyMzkwMjJ9.0y9wLZVSLbp7vY3Akrwc2CVD1qUuixbl7JAptx4ndP4"
 }
 
 let vagas = [
   {
-    id: 0,
+    id: 1,
     anunciante,
     nome: "Vaga para motoboy",
     descricao: "Precisamos de um motoboy para auxiliar nas entregas das 16:30h às 00h. Precisa ter habilitação e moto em condições. Valor no anuncio por dia trabalhado.",
     valor: 80,
     dataHoraInicio: "16:30",
-    dataHoraFim: "00:00"
+    dataHoraFim: "00:00",
+    imagem: "https://www.scuadra.com.br/blog/wp-content/uploads/2019/09/306545-motoboy-para-delivery-entenda-a-importancia-e-como-contratar.jpg"
   },
   {
-    id: 1,
+    id: 2,
     anunciante,
     nome: "Chapeiro",
     descricao: "Precisamos de um chapeiro experiente para trabalhar conosco. Valor no anuncio por dia trabalhado.",
     valor: 130,
     dataHoraInicio: "15:30",
-    dataHoraFim: "00:00"
+    dataHoraFim: "00:00",
+    imagem: "https://empregoses.com.br/wp-content/uploads/2018/01/AA-42.png"
   }
+]
+
+let mensagens = [
+  {
+    id: 1,
+    thumbnail: "https://www.scuadra.com.br/blog/wp-content/uploads/2019/09/306545-motoboy-para-delivery-entenda-a-importancia-e-como-contratar.jpg",
+    titulo: "Uma pessoa se candidatou à sua vaga",
+    mensagem: "Vaga para motoboy"
+  },
+  {
+    id: 2,
+    thumbnail: "https://empregoses.com.br/wp-content/uploads/2018/01/AA-42.png",
+    titulo: "Uma pessoa se candidatou à sua vaga",
+    mensagem: "Chapeiro"
+  },
 ]
 
 export default {
@@ -82,5 +99,5 @@ export default {
   perfis: [ candidato.perfilUsuario, anunciante.perfilUsuario ],
   vagas: vagas,
   enderecos: [ candidato.endereco, anunciante.endereco ],
-
+  mensagens
 }

@@ -5,7 +5,10 @@
     "version": "1.0.0",
     "description": "Protótipo de aplicativo para procura e oferta de empregos, vagas temporárias e bikoz",
     "privacy": "unlisted",
-    "platforms": ["ios", "android"],
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "backgroundColor": "#FAFAFA",
@@ -26,6 +29,7 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "sdkVersion": "38.0.0"
   }
 }

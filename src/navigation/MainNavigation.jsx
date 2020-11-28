@@ -17,36 +17,42 @@ import Sobre from 'screens/Perfil/Sobre';
 import Vaga from 'screens/Vagas/Vaga';
 
 import logo from 'assets/logo-branco.png';
+import { useSelector } from 'react-redux';
 
 const { Navigator: TabNavigator, Screen: TabScreen } = createBottomTabNavigator();
 const { Navigator, Screen } = createStackNavigator();
 
-const Tabs = () => (
-  <TabNavigator initialRouteName="vagas"
-    tabBarOptions={{
-      activeBackgroundColor: Constants.manifest.primaryColor,
-      inactiveBackgroundColor: Constants.manifest.primaryColor,
-      activeTintColor: "#FAFAFA",
-      inactiveTintColor: "rgba(250, 250, 250, .6)"
-    }}>
-    {/* <TabScreen name="mensagens" component={Mensagens} options={{
-      title: "Mensagens",
-      tabBarIcon: ({focused, ...props}) => <FontAwesomeIcon icon="inbox" {...props} />
-    }} /> */}
-    <TabScreen name="curriculo" component={Curriculo} options={{
-      title: "Currículo",
-      tabBarIcon: ({focused, ...props}) => <FontAwesomeIcon icon="clipboard-list" {...props} />
-    }} />
-    <TabScreen name="vagas" component={Vagas} options={{
-      title: "Vagas",
-      tabBarIcon: ({focused, ...props}) => <FontAwesomeIcon icon="list" {...props} />
-    }} />
-    <TabScreen name="perfil" component={Perfil} options={{
-      title: "Perfil",
-      tabBarIcon: ({focused, ...props}) => <FontAwesomeIcon icon="user" {...props} />
-    }} />
-  </TabNavigator>
-);
+const Tabs = () => {
+  const { tipoConta } = useSelector(({login}) => login.usuario)  
+  return (
+    <TabNavigator initialRouteName="vagas"
+      tabBarOptions={{
+        activeBackgroundColor: Constants.manifest.primaryColor,
+        inactiveBackgroundColor: Constants.manifest.primaryColor,
+        activeTintColor: "#FAFAFA",
+        inactiveTintColor: "rgba(250, 250, 250, .6)"
+      }}>
+      { tipoConta ? (
+      <TabScreen name="mensagens" component={Mensagens} options={{
+        title: "Mensagens",
+        tabBarIcon: ({focused, ...props}) => <FontAwesomeIcon icon="inbox" {...props} />
+      }} />
+      ) : (
+      <TabScreen name="curriculo" component={Curriculo} options={{
+        title: 'Currículo',
+        tabBarIcon: ({focused, ...props}) => <FontAwesomeIcon icon="clipboard-list" {...props} />
+      }} /> )}
+      <TabScreen name="vagas" component={Vagas} options={{
+        title: "Vagas",
+        tabBarIcon: ({focused, ...props}) => <FontAwesomeIcon icon="list" {...props} />
+      }} />
+      <TabScreen name="perfil" component={Perfil} options={{
+        title: "Perfil",
+        tabBarIcon: ({focused, ...props}) => <FontAwesomeIcon icon="user" {...props} />
+      }} />
+    </TabNavigator>
+  )
+};
 
 export default () => (
   <Navigator screenOptions={{

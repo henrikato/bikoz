@@ -5,35 +5,42 @@ import Container from 'components/Container';
 import { Button, Divider, List } from 'react-native-paper';
 import { Title } from 'native-base';
 import ListItem from 'components/ListItem';
+import { useSelector } from 'react-redux';
 
 export default () => {
   const navigation = useNavigation();
   navigation.setOptions({headerLeft: null});
+
+  const { tipoConta, perfilUsuario } = useSelector(({login}) => login.usuario);
   
+  function formatarHorarioFuncionamento () {
+    return `${perfilUsuario.horaAbertura} - ${perfilUsuario.horaFechamento}`
+  }
+
   return (
     <KeyboardAvoidingView style={{flexGrow: 1}} behavior="padding" keyboardVerticalOffset={Platform.OS === "ios" ? 60 : 40}>
       <ScrollView contentContainerStyle={{flexGrow: 1}}>
         <Container>
-          <Title>Meu currículo</Title>
+        <Title>{tipoConta ? 'Perfil da empresa' : 'Meu currículo'}</Title>
 
           <List.Section>
             <ListItem 
-              title="Experiências" 
-              description="Informe aqui suas experiências prévias em outros empregos ou serviços" />
+              title={tipoConta ? 'Tipo de estabelecimento' : 'Serviços oferecidos'} 
+              description={tipoConta ? perfilUsuario.tipoEstabelecimento : perfilUsuario.servicoOferecido} />
             <Divider />
 
             <ListItem 
-              title="Serviços oferecidos" 
-              description="Informe aqui quais os serviços que você oferece ou é capacitado" />
+              title={tipoConta ? "Horário de funcionamento" : "Experiências anteriores"} 
+              description={tipoConta ? formatarHorarioFuncionamento() : perfilUsuario.experienciaAnterior} />
             <Divider />
 
             <ListItem 
               title="Informações adicionais" 
-              description="Insira outras informações que gostaria de adicionar ao seu currículo (ex: conhecimento de outros idiomas)" />
+              description={perfilUsuario.observacao} />
           </List.Section>
 
           <View style={{flexGrow: 1, justifyContent: "flex-end"}}>
-            <Button mode="contained" style={{marginTop: 20}} onPress={() => navigation.navigate("editarCurriculo")}>EDITAR MEU CURRÍCULO</Button>
+            <Button mode="contained" style={{marginTop: 20}} onPress={() => navigation.navigate(tipoConta ? "editarPerfilEmpresa" : "editarCurriculo")}>EDITAR</Button>
           </View>
         </Container>
       </ScrollView>

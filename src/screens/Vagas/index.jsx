@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, TextInput, StyleSheet, TouchableHighlight, Text, FlatList } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import Constants from 'expo-constants';
@@ -6,16 +6,11 @@ import Container from 'components/Container';
 import FlexImage from 'components/FlexImage';
 import { FormatarEnderecoSimples } from 'util/FormatarEndereco';
 import { FormatarHorarioVaga } from 'util/FormatarHorario';
-import { listarVagas } from 'store/actions/vagaActions';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { Subtitle, Title } from 'native-base';
-import { Divider } from 'react-native-paper';
-
-const mapDispatchToProps = dispatch => bindActionCreators({listarVagas}, dispatch);
+import { Api } from 'services/ApiService';
 
 class Vagas extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
 
     props.navigation.setOptions({headerLeft: null});
@@ -24,14 +19,19 @@ class Vagas extends React.Component {
       vagas: []
     }
   }
+
+  fetchVagas() {
+    Api.get("/vaga").then(({data}) => this.setState({ vagas: data }));
+  }
+
   componentDidMount() {
-    this.props.listarVagas().then(({payload: {data}}) => this.setState({vagas: data}))
+    this.fetchVagas();
   }
 
   renderizaVaga = ({item}) => (
     <TouchableHighlight style={styles.vaga} underlayColor="#E7E7E7" onPress={() => this.props.navigation.navigate("vaga", {detalhes: item})}>
       <View style={styles.conteudoVaga}>
-        <FlexImage source={{uri: item.imagem}} style={styles.imgVaga} />
+        <FlexImage source={{uri: item.imagem}} style={styles.imgVaga} resizeMode="cover" />
         <View style={{ flex: 1 }}>
           <Text style={styles.tituloVaga} numberOfLines={1} ellipsizeMode="tail">{item.nome} - {item.anunciante.nome}</Text>
           <Text style={styles.subTituloVaga}>{FormatarEnderecoSimples(item.anunciante.endereco)}</Text>
@@ -61,8 +61,7 @@ class Vagas extends React.Component {
     )
   }
 }
-
-export default connect(null, mapDispatchToProps)(Vagas);
+export default Vagas;
 
 const styles = StyleSheet.create({
   searchBarWrapper: {
